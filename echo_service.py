@@ -131,11 +131,19 @@ def get_echo_response(input):
     text_splitter = CharacterTextSplitter (chunk_size=50, chunk_overlap=0)
     texts= text_splitter.split_documents(documents)
     
-    from langchain_community.vectorstores import faiss
-    db = faiss.FAISS.from_documents(texts, embeddings)
+    #FAISS
+    # from langchain_community.vectorstores import faiss
+    # db = faiss.FAISS.from_documents(texts, embeddings)
 
-    # retriever = db.as_retriever(search_kwargs={"k": 2})
-    context=db.similarity_search(query=input ,fetch_k=2)
+    #CHROMADB
+    from langchain_community.vectorstores import Chroma
+    db=Chroma.from_documents(texts, embeddings)
+
+
+
+    retriever = db.as_retriever(search_kwargs={"k": 2})
+    # context=db.similarity_search(query=input ,fetch_k=2)
+    context=retriever.get_relevant_documents("Capital of India?")
     return context
 
 def embedding_return(input):
