@@ -126,12 +126,14 @@ def get_echo_response(input):
     from langchain_community.document_loaders import TextLoader
     loader = TextLoader('1.txt')
     documents = loader.load()
+
     from langchain.text_splitter import CharacterTextSplitter
     text_splitter = CharacterTextSplitter (chunk_size=50, chunk_overlap=0)
     texts= text_splitter.split_documents(documents)
     
     from langchain_community.vectorstores import faiss
     db = faiss.FAISS.from_documents(texts, embeddings)
+    
     # retriever = db.as_retriever(search_kwargs={"k": 2})
     context=db.similarity_search(query=input ,fetch_k=2)
     return context
