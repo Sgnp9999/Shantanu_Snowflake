@@ -12,7 +12,7 @@ SERVICE_PORT = os.getenv('SERVER_PORT', 8080)
 CHARACTER_NAME = os.getenv('CHARACTER_NAME', 'I')
 
 from langchain.embeddings.sentence_transformer import SentenceTransformerEmbeddings
-embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2", cache_folder="/emb")
+embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2", cache_folder="emb")
 
 def get_logger(logger_name):
     logger = logging.getLogger(logger_name)
@@ -133,7 +133,7 @@ def get_echo_response(input):
     
     from langchain_community.vectorstores import faiss
     db = faiss.FAISS.from_documents(texts, embeddings)
-    
+
     # retriever = db.as_retriever(search_kwargs={"k": 2})
     context=db.similarity_search(query=input ,fetch_k=2)
     return context
